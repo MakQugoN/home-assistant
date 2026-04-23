@@ -1,8 +1,4 @@
-# SPDX-FileCopyrightText: 2024-2025 Pascal Brogle @broglep
-#
-# SPDX-License-Identifier: MIT
-
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant  # noqa: D104
 
 from ..const import (  # noqa: TID252
     CONF_OPTION_TCP_PROXY,
