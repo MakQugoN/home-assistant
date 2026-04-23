@@ -1,8 +1,4 @@
-# SPDX-FileCopyrightText: 2024-2025 Pascal Brogle @broglep
-#
-# SPDX-License-Identifier: MIT
-
-import asyncio
+import asyncio  # noqa: D104
 import contextlib
 import datetime
 from collections import defaultdict
