@@ -1,10 +1,6 @@
-# SPDX-FileCopyrightText: 2024-2025 Pascal Brogle @broglep
-#
-# SPDX-License-Identifier: MIT
-
 from collections.abc import Mapping
 from functools import cached_property
-from typing import Any, TypeVar
+from typing import Any, Optional, TypeVar
 
 import google
 
@@ -15,7 +11,7 @@ T = TypeVar("T", None, mesh_pb2.Routing, telemetry_pb2.Telemetry, admin_pb2.Admi
 
 
 class Packet[T]:
-    def __init__(self, packet: mesh_pb2.FromRadio) -> None:
+    def __init__(self, packet: mesh_pb2.FromRadio | mesh_pb2.ToRadio) -> None:
         self._packet = packet
         self._logger = LOGGER.getChild(self.__class__.__name__)
 
@@ -44,7 +40,7 @@ class Packet[T]:
         return self.mesh_packet.decoded if self.mesh_packet and self.mesh_packet.HasField("decoded") else None
 
     @property
-    def port_num(self) -> portnums_pb2.PortNum | None:
+    def port_num(self) -> Optional[portnums_pb2.PortNum]:  # noqa: UP045
         return self.data.portnum if self.data is not None else None
 
     @cached_property
@@ -103,7 +99,7 @@ class FullNodeInfoPacket(Packet[mesh_pb2.NodeInfo]):
         super().__init__(packet)
 
     @property
-    def port_num(self) -> portnums_pb2.PortNum | None:
+    def port_num(self) -> Optional[portnums_pb2.PortNum]:  # noqa: UP045
         return portnums_pb2.PortNum.NODEINFO_APP
 
     @cached_property

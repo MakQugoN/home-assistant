@@ -1,8 +1,4 @@
-# SPDX-FileCopyrightText: 2024-2025 Pascal Brogle @broglep
-#
-# SPDX-License-Identifier: MIT
-
-import contextlib
+import contextlib  # noqa: D104
 
 from .connection.tcp import TcpConnection
 from .interface import MeshInterface
