@@ -1,7 +1,3 @@
-# SPDX-FileCopyrightText: 2024-2025 Pascal Brogle @broglep
-#
-# SPDX-License-Identifier: MIT
-
 from __future__ import annotations
 
 from copy import deepcopy
@@ -124,6 +120,8 @@ class MeshtasticDataUpdateCoordinator(DataUpdateCoordinator):
             metric_type = "powerMetrics"
         elif telemetry_type == EventMeshtasticApiTelemetryType.ENVIRONMENT_METRICS:
             metric_type = "environmentMetrics"
+        elif telemetry_type == EventMeshtasticApiTelemetryType.HOST_METRICS:
+            metric_type = "hostMetrics"
         else:
             self._logger.warning("Unsupported telemetry type %s", telemetry_type)
             return
