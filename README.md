@@ -1,10 +1,3 @@
-<!--
-SPDX-FileCopyrightText: 2024-2025 Pascal Brogle @broglep
-SPDX-FileCopyrightText: 2025 Ylian Saint-Hilaire @ylianst
-
-SPDX-License-Identifier: MIT
--->
-
 # Home-Assistant Meshtastic Integration
 
 [![GitHub Release][releases-shield]][releases]
@@ -211,7 +204,7 @@ To do this, create a new Home Assistant automation that triggers on "Manual Even
 trigger:
   event:
     event_type: meshtastic_api_text_message
-    event_data:
+    data:
       data:
         from: 1127918844
         to:
@@ -316,4 +309,3 @@ If you want to contribute to this please read the [Contribution guidelines](CONT
 [license-shield]: https://img.shields.io/github/license/meshtastic/home-assistant.svg?style=for-the-badge
 [releases-shield]: https://img.shields.io/github/release/meshtastic/home-assistant.svg?style=for-the-badge
 [releases]: https://github.com/meshtastic/home-assistant/releases
-
