@@ -1,7 +1,3 @@
-# SPDX-FileCopyrightText: 2024-2025 Pascal Brogle @broglep
-#
-# SPDX-License-Identifier: MIT
-
 import asyncio
 from collections.abc import AsyncIterable
 from types import TracebackType

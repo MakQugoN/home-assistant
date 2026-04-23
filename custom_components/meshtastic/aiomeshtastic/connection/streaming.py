@@ -1,7 +1,3 @@
-# SPDX-FileCopyrightText: 2024-2025 Pascal Brogle @broglep
-#
-# SPDX-License-Identifier: MIT
-
 import asyncio
 from abc import abstractmethod
 from collections.abc import AsyncIterable
