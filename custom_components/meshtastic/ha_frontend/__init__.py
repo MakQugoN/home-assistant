@@ -1,8 +1,4 @@
-# SPDX-FileCopyrightText: 2024-2025 Pascal Brogle @broglep
-#
-# SPDX-License-Identifier: MIT
-
-from .version import VERSION
+from .version import VERSION  # noqa: D104
 
 __all__ = ["VERSION", "locate_dir"]
 
