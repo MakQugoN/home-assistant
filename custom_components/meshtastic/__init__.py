@@ -416,7 +416,7 @@ def _setup_device_name_sync(hass: HomeAssistant, entry: MeshtasticConfigEntry) -
             return
 
         device_registry = dr.async_get(hass)
-        device = device_registry.async_get_device(identifiers={(DOMAIN, str(node_id))})
+        device = device_registry.async_get_device_by_identifier((DOMAIN, str(node_id)), entry.entry_id)
         if device is not None and device.name != new_name:
             device_registry.async_update_device(device.id, name=new_name)
 
@@ -460,10 +460,10 @@ async def _setup_meshtastic_device(  # noqa: PLR0913
     # first time (e.g. right after a firmware update that enables it),
     # since in that case the old device has neither the new identity_key
     # nor the new node number recorded yet
-    existing_device = device_registry.async_get_device(identifiers={(DOMAIN, identity_key)})
+    existing_device = device_registry.async_get_device_by_identifier((DOMAIN, identity_key), entry.entry_id)
     existing_device_is_same_identity = existing_device is not None
     if existing_device is None:
-        existing_device = device_registry.async_get_device(identifiers={(DOMAIN, str(node_id))})
+        existing_device = device_registry.async_get_device_by_identifier((DOMAIN, str(node_id)), entry.entry_id)
         existing_device_is_same_identity = existing_device is not None
     if existing_device is None and mac_address:
         # MAC-only match: ten sam fizyczny sprzęt, ale NIE wiadomo czy to ta sama
@@ -471,7 +471,9 @@ async def _setup_meshtastic_device(  # noqa: PLR0913
         # radiu). Nadal przydatne niżej do via_device/connections, ale nie wolno
         # z niego dziedziczyć starych identyfikatorów — inaczej zregenerowany
         # węzeł zlewa się na stałe z poprzednikiem i nigdy nie da się go usunąć.
-        existing_device = device_registry.async_get_device(connections={(dr.CONNECTION_NETWORK_MAC, mac_address)})
+        existing_device = device_registry.async_get_device_by_connection(
+            (dr.CONNECTION_NETWORK_MAC, mac_address), entry.entry_id
+         )
         existing_device_is_same_identity = False
     via_device = None
     if existing_device is not None and existing_device.config_entries != {entry.entry_id}:
@@ -528,6 +530,11 @@ async def _setup_meshtastic_device(  # noqa: PLR0913
     if existing_device is not None and existing_device_is_same_identity:
         identifiers |= {(d, i) for d, i in existing_device.identifiers if d == DOMAIN}
 
+    via_device_id = None
+    if via_device is not None:
+        via_device_entry = device_registry.async_get_device_by_identifier(via_device, entry.entry_id)
+        via_device_id = via_device_entry.id if via_device_entry else None
+
     d = device_registry.async_get_or_create(
         config_entry_id=entry.entry_id,
         identifiers=identifiers,
@@ -535,7 +542,7 @@ async def _setup_meshtastic_device(  # noqa: PLR0913
         model=device_hardware_names.get(node["user"]["hwModel"], None),
         model_id=str(node["user"]["hwModel"]),
         serial_number=node["user"]["id"],
-        via_device=via_device,
+        via_device_id=via_device_id,
         sw_version=client.metadata.get("firmwareVersion")
         if gateway_node["num"] == node_id and client.metadata
         else None,
@@ -769,7 +776,7 @@ async def _add_entities_for_entry(hass: HomeAssistant, entities: list[Entity], e
         device_id = UNDEFINED
         identifiers = getattr(e, "_device_identifiers", None)
         if identifiers:
-            device = device_registry.async_get_device(identifiers=identifiers)
+            device = device_registry.async_get_device_by_identifier(next(iter(identifiers)), entry.entry_id)
             if device:
                 device_id = device.id
         try:
