@@ -285,7 +285,7 @@ class MeshtasticDataUpdateCoordinator(DataUpdateCoordinator):
 
         node_id = event_data.get("num", None)
         if node_id is None or node_id not in self.data:
-            self._logger.debug("Node %d not in coordinator data", node_id)
+            # oczekiwane dla każdego węzła spoza filtra — nie logujemy, bo zalewa log
             return
 
         if self.data[node_id] != event_data:

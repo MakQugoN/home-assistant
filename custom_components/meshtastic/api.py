@@ -379,6 +379,9 @@ class MeshtasticApiClient:
         event_data["message_id"] = packet.mesh_packet.id
         if packet.mesh_packet and packet.mesh_packet.hop_start > 0:
             event_data["hops_away"] = packet.mesh_packet.hop_start - packet.mesh_packet.hop_limit
+        if packet.mesh_packet:
+            event_data["rx_snr"] = packet.mesh_packet.rx_snr
+            event_data["rx_rssi"] = packet.mesh_packet.rx_rssi
         event_data[ATTR_EVENT_MESHTASTIC_API_NODE_INFO] = {"name": node.long_name}
         self._hass.bus.async_fire(EVENT_MESHTASTIC_API_TEXT_MESSAGE, event_data)
 
